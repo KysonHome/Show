@@ -217,6 +217,39 @@
             $(this).addClass('active');
         });
 
+        $('#quick_view_modal').on('show.bs.modal', function (event) {
+            var $trigger = $(event.relatedTarget);
+            var $productItem = $trigger.closest('.ltn__product-item');
+
+            if (!$productItem.length) {
+                return;
+            }
+
+            var $modal = $(this);
+            var $productImage = $productItem.find('.product-img img').first();
+            var $priceWrap = $productItem.find('.product-price').first();
+            var imageSrc = $productImage.attr('src') || '';
+            var imageAlt = $productImage.attr('alt');
+            var title = $.trim($productItem.find('.product-title').first().text());
+            var price = $.trim($priceWrap.find('span').first().text());
+            var oldPrice = $.trim($priceWrap.find('del').first().text());
+            var brief = $productItem.data('quickViewBrief') || 'More product details are available on request.';
+
+            $modal.find('.js-quick-view-image').attr({
+                src: imageSrc,
+                alt: imageAlt && imageAlt !== '#' ? imageAlt : title
+            });
+            $modal.find('.js-quick-view-title').text(title);
+            $modal.find('.js-quick-view-price').text(price);
+            $modal.find('.js-quick-view-brief').text(brief);
+
+            if (oldPrice) {
+                $modal.find('.js-quick-view-old-price').text(oldPrice).show();
+            } else {
+                $modal.find('.js-quick-view-old-price').hide();
+            }
+        });
+
         /* --------------------------------------------------------
             12. Product Details Page
         --------------------------------------------------------- */
